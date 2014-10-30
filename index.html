@@ -4,58 +4,30 @@
 	<title>This is the header</title>
 
 <!--Leaflet CSS File-->
-<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-<link rel="stylesheet" href="styles.css" />
-<link rel="stylesheet" href="leaflet.usermarker.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
 
-<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
-
-<!--<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
-<link rel="stylesheet" href="css/leaflet.awesome-markers.css">
--->
-
-
-
-
-<style>
-#map{
-	width:960px;
-	height:500px;
-}
-</style>
-	
 </head>
 
 <body>
-<!--<a href="http://github.com/naulston/first-leaflet-map">-->
+
 <h1>This is a map or not</h1>
 
 <!--Div for my map-->
 <div id="map"></div>
 
 <!--Leaflet Java Script-->
-<script type='text/javascript' src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.0/css/bootstrap.min.css">
+ <script type='text/javascript' src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
  <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+ <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
  <script src="js/leaflet.awesome-markers.js"></script>
 
 
-<!--Link to Geojson file-->
-<!--<script type="text/javascript" src="http://naulston.github.io/first-leaflet-map/EBT_Event_none.geojson"></script>-->
 
-<script type="text/javascript" src="EBT_AC_Locations.geojson"></script>
 
-<!--Map container Location of the map-->
-<!--map.locate({setView: true, maxZoom: 15});...setView([51.505, -0.09], 13);-->
+<script type="text/javascript" src="EBT_AC_Locations.js"></script>
 
-<!--L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-maxZoom: 18,
-attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-id: 'examples.map-20v6611k'
-}).addTo(map); -->
 
 <script>
 var map = L.map('map').locate({setView: true, maxZoom: 16});
@@ -68,7 +40,7 @@ var map = L.map('map').locate({setView: true, maxZoom: 16});
             }).addTo(map);
 
 function onLocationFound(e) {
-    var radius = e.accuracy / .075;
+    var radius = e.accuracy /5;
 
     L.marker(e.latlng).addTo(map)
         .bindPopup("EBT Locations within " + radius + " meters of you").openPopup();
@@ -89,39 +61,41 @@ var blueMarker = L.AwesomeMarkers.icon({
   color: 'blue'
 })
 
-var myLayer = L.geoJson().addTo(map);
-myLayer.addData(EBT_Locations);
-
-
-
-var myLayer = L.geoJson(EBT_Locations, {
-    onEachFeature: yourOnEachFeatureFunction
-}).addTo(map);
 
 
 
 var myLayer = L.geoJson(EBT_Locations, {
 
-    onEachFeature: yourOnEachFeatureFunction,
+    onEachFeature: onEachFeatureFunction,
 
     pointToLayer: function (feature, latlng) {
+        //alert(feature.properties.Surcharge);
+        
+        var redMarker = L.AwesomeMarkers.icon({
+            icon: 'coffee', 
+            markerColor: 'red'
+            })
 
+        var blueMarker = L.AwesomeMarkers.icon({
+            icon: 'coffee', 
+            markerColor: 'blue'
+            })
         switch (feature.properties.Surcharge) {
 
-            case 'YES': return L.marker(latlng, {icon: blueMarker})
+            case 'YES': return L.marker(latlng, {icon: redMarker})
+            break;
 
-            case 'NO': return L.marker(latlng, {icon: redMarker})
-
+            case 'NO': return L.marker(latlng, {icon: blueMarker})
+            break;
+        }
 }
-}
-
 }).addTo(map);
 
 
 
 
 
-function yourOnEachFeatureFunction(feature, layer){
+function onEachFeatureFunction(feature, layer){
     if (feature.properties.Device) {
         layer.bindPopup('<b>' + feature.properties.LocationNa + '</b><br>Type:&nbsp;'
             + feature.properties.Device + '<br>Surcharge:&nbsp;' + feature.properties.Surcharge + '<br>Amount:&nbsp;' + feature.properties.SCAmount + '<br>Address:&nbsp;' + feature.properties.Street + ',&nbsp;' + feature.properties.City);
@@ -133,31 +107,4 @@ function yourOnEachFeatureFunction(feature, layer){
 </html>
 
 
-L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'coffee', markerColor: 'darkred', prefix: 'fa', iconColor: 'black'}) })
 
-
-http://chris-osm.blogspot.com/2013/11/using-leaflet-part-2.html
-
-L.geoJson(EBT_Locations, {
-    pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-    }
-}).addTo(map);
-
-
-var Surcharged = {
-    "type" : "FeatureCollection",
-    "features" : _.filter(places.features, function(p) { 
-        return p.properties.Surcharge == 'YES';
-    })
-};
-
-
-
-var Surcharged = L.geoJson(EBT_Locations, {
-    pointToLayer: function (feature, latlng) {
-        return L.marker(latlng, {icon: redMarker});
-    }
-}).addTo(map);
-
-case 'YES': return L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'coffee', markerColor: 'darkred', prefix: 'fa', iconColor: 'black'}) })
