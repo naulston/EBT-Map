@@ -40,10 +40,10 @@ var map = L.map('map').locate({setView: true, maxZoom: 16});
             }).addTo(map);
 
 function onLocationFound(e) {
-    var radius = e.accuracy /6;
+    var radius = e.accuracy /1.28;
 
     L.marker(e.latlng).addTo(map)
-        .bindPopup("EBT Locations within " + radius + " meters of you").openPopup();
+        .bindPopup("EBT Locations within " + radius + "2 Blocks").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 }
