@@ -43,7 +43,7 @@ function onLocationFound(e) {
     var radius = e.accuracy /1.28;
 
     L.marker(e.latlng).addTo(map)
-        .bindPopup("EBT Locations within 2 Blocks of Your Location").openPopup();
+        .bindPopup("EBT Locations within 4 Blocks of Your Location").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
 }
